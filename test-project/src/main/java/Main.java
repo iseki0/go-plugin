@@ -12,7 +12,7 @@ public class Main {
     public static void main(String[] args) throws Throwable {
         System.out.println("release dll file");
         String rn;
-        if (System.getproperty("os.name").toLowerCase().contains("windows")) {
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
             rn = "aa-windows-amd64.dll";
         } else {
             rn = "aa-linux-amd64.so";
