@@ -6,7 +6,7 @@ import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.language.jvm.tasks.ProcessResources
-import java.util.*
+import java.util.Locale
 
 class GoCompileExtension(private val project: Project) {
     private val obj = project.objects
@@ -15,11 +15,12 @@ class GoCompileExtension(private val project: Project) {
         val buildMode: BuildMode,
         val taskName: String,
         val inputSource: DirectoryProperty,
+        val goTarget: GoTarget,
     ) {
         val buildTagsProperty: ListProperty<String> =
             obj.listProperty(String::class.java).convention(emptyList<String>())
-        val environmentProperty: MapProperty<String, String> = obj.mapProperty(String::class.java, String::class.java)
-            .convention(GoCompilationTask.DEFAULT_ENVIRONMENT)
+        val environmentProperty: MapProperty<String, String> =
+            obj.mapProperty(String::class.java, String::class.java).convention(GoCompilationTask.DEFAULT_ENVIRONMENT)
         val trimPathProperty: Property<Boolean> = obj.property(Boolean::class.java).convention(true)
         val packageProperty: Property<String> = obj.property(String::class.java).convention(".")
         val ldflagsProperty: Property<String> = obj.property(String::class.java).convention("-s -w -buildid=")
@@ -53,7 +54,12 @@ class GoCompileExtension(private val project: Project) {
     private fun extracted(conf: CompilationConfiguration, name: String) {
         for ((target, configBlock) in conf.targets) {
             val taskName = nameOf(name, target)
-            val config = CompilationPerTargetConfig(conf.buildMode, taskName, conf.inputSource).apply(configBlock)
+            val config = CompilationPerTargetConfig(
+                buildMode = conf.buildMode,
+                taskName = taskName,
+                inputSource = conf.inputSource,
+                goTarget = target,
+            ).apply(configBlock)
             doRegister(taskName, name, config, target)
         }
     }
@@ -97,7 +103,7 @@ class GoCompileExtension(private val project: Project) {
             val filename = "$binName-${goTarget.goos}-${goTarget.goarch}$suffix"
             it.outputFileProperty.set(project.layout.buildDirectory.file("go/$filename"))
         }
-        project.tasks.getByName("processResources"){
+        project.tasks.getByName("processResources") {
             if (it !is ProcessResources) return@getByName
             it.from(newTask.get().outputFileProperty)
         }
