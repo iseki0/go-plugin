@@ -22,8 +22,8 @@ go {
         }
         goTargets(GoTargets.LINUX_AMD64) {
             environmentProperty.put("CGO_ENABLED", "1")
-            environmentProperty.put("CC", "zig cc -target x86_64-linux")
-            environmentProperty.put("CXX", "zig cxx -target x86_64-linux")
+            environmentProperty.put("CC", "zig cc -target x86_64-linux-gnu")
+            environmentProperty.put("CXX", "zig cxx -target x86_64-linux-gnu")
         }
     }
 }
