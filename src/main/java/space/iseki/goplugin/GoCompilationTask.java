@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Map;
 
+@CacheableTask
 public class GoCompilationTask extends DefaultTask {
     static final Map<String, String> DEFAULT_ENVIRONMENT = Map.of("CGO_ENABLED", "0");
     private final Property<String> goCmd = getProject().getObjects().property(String.class).convention("go");
