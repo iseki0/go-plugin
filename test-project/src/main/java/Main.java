@@ -15,7 +15,7 @@ public class Main {
         if (System.getproperty("os.name").toLowerCase().contains("windows")) {
             rn = "aa-windows-amd64.dll";
         } else {
-            rm = "aa-linux-amd64.so";
+            rn = "aa-linux-amd64.so";
         }
         var created = Files.createTempDirectory("aa-").resolve(rn);
         try (var res = Main.class.getClassLoader().getResourceAsStream(rn);
