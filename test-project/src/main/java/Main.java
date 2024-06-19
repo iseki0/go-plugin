@@ -11,7 +11,12 @@ public class Main {
 
     public static void main(String[] args) throws Throwable {
         System.out.println("release dll file");
-        var rn = "aa-windows-amd64.dll";
+        String rn;
+        if (System.getproperty("os.name").toLowerCase().contains("windows")) {
+            rn = "aa-windows-amd64.dll";
+        } else {
+            rm = "aa-linux-amd64.so";
+        }
         var created = Files.createTempDirectory("aa-").resolve(rn);
         try (var res = Main.class.getClassLoader().getResourceAsStream(rn);
              var out = Files.newOutputStream(created, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {

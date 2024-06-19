@@ -3,6 +3,7 @@ import space.iseki.goplugin.GoTargets
 plugins {
     `java`
     id("space.iseki.goplugin")
+    application
 }
 
 java {
@@ -19,5 +20,14 @@ go {
             environmentProperty.put("CC", "zig cc -target x86_64-windows")
             environmentProperty.put("CXX", "zig cxx -target x86_64-windows")
         }
+        goTargets(GoTargets.LINUX_AMD64) {
+            environmentProperty.put("CGO_ENABLED", "1")
+            environmentProperty.put("CC", "zig cc -target x86_64-linux")
+            environmentProperty.put("CXX", "zig cxx -target x86_64-linux")
+        }
     }
+}
+
+application{
+    mainClass = "Main"
 }

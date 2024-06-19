@@ -1,0 +1,40 @@
+name: Build
+
+on:
+  push:
+    tags:
+      - 'v0.*'
+      - 'v1.*'
+    branches:
+      - 'master'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version-file: 21
+          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          # cache-encryption-key: ${{ secrets.GradleEncryptionKey }}
+          validate-wrappers: true
+          build-scan-publish: true
+          build-scan-terms-of-use-url: "https://gradle.com/terms-of-service"
+          build-scan-terms-of-use-agree: "yes"
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '^1.22'
+      - uses: goto-bus-stop/setup-zig@v2
+      - name: Run build
+        run: |
+          chmod +x gradlew
+          ./gradlew build
+      - name: Test project
+        run: |
+          cd test-project
+          ../gradlew run
