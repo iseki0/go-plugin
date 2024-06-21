@@ -1,12 +1,15 @@
 package space.iseki.goplugin
 
 import org.gradle.api.Project
+import org.gradle.api.UnknownDomainObjectException
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.language.jvm.tasks.ProcessResources
-import java.util.Locale
+import java.util.*
 
 class GoCompileExtension(private val project: Project) {
     private val obj = project.objects
@@ -42,16 +45,18 @@ class GoCompileExtension(private val project: Project) {
     fun exec(name: String, configuration: CompilationConfiguration.() -> Unit) {
         val conf = CompilationConfiguration(BuildMode.Default)
         conf.configuration()
-        extracted(conf, name)
+        extracted(conf, name, true)
     }
 
     fun dll(name: String, configuration: CompilationConfiguration.() -> Unit) {
         val conf = CompilationConfiguration(BuildMode.CShared)
         conf.configuration()
-        extracted(conf, name)
+        extracted(conf, name, true)
     }
 
-    private fun extracted(conf: CompilationConfiguration, name: String) {
+    private fun extracted(conf: CompilationConfiguration, name: String, mergeIntoResource: Boolean) {
+        val logger = project.logger
+        val tasks = mutableListOf<Provider<GoCompilationTask>>()
         for ((target, configBlock) in conf.targets) {
             val taskName = nameOf(name, target)
             val config = CompilationPerTargetConfig(
@@ -60,7 +65,27 @@ class GoCompileExtension(private val project: Project) {
                 inputSource = conf.inputSource,
                 goTarget = target,
             ).apply(configBlock)
-            doRegister(taskName, name, config, target)
+            tasks += doRegister(taskName, name, config, target)
+        }
+        if (mergeIntoResource) {
+            project.afterEvaluate {
+                try {
+                    project.tasks.getByName("processResources") {
+                        if (it !is ProcessResources) {
+                            logger.error("processResources is not a ProcessResources")
+                            return@getByName
+                        }
+                        for (newTask in tasks) {
+                            it.from(newTask.get().outputFileProperty)
+                        }
+                    }
+                } catch (e: UnknownDomainObjectException) {
+                    logger.warn(
+                        "project processResources not found, the compiled binary will not be bundled into resource, {}",
+                        e.message
+                    )
+                }
+            }
         }
     }
 
@@ -75,7 +100,12 @@ class GoCompileExtension(private val project: Project) {
         ) else it.toString()
     }
 
-    private fun doRegister(name: String, binName: String, conf: CompilationPerTargetConfig, goTarget: GoTarget) {
+    private fun doRegister(
+        name: String,
+        binName: String,
+        conf: CompilationPerTargetConfig,
+        goTarget: GoTarget
+    ): TaskProvider<GoCompilationTask> {
         val newTask = project.tasks.register(name, GoCompilationTask::class.java) {
             it.group = "go"
             it.description = "Compile go sources"
@@ -103,10 +133,7 @@ class GoCompileExtension(private val project: Project) {
             val filename = "$binName-${goTarget.goos}-${goTarget.goarch}$suffix"
             it.outputFileProperty.set(project.layout.buildDirectory.file("go/$filename"))
         }
-        project.tasks.getByName("processResources") {
-            if (it !is ProcessResources) return@getByName
-            it.from(newTask.get().outputFileProperty)
-        }
+        return newTask
     }
 }
 
