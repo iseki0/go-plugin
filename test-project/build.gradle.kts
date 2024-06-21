@@ -2,7 +2,7 @@ import space.iseki.goplugin.GoTargets
 
 plugins {
     `java`
-    id("space.iseki.goplugin")
+    id("space.iseki.go-plugin")
     application
 }
 
