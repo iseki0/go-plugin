@@ -1,0 +1,121 @@
+public final class space/iseki/goplugin/BuildMode : java/lang/Enum, java/io/Serializable {
+	public static final field CShared Lspace/iseki/goplugin/BuildMode;
+	public static final field Default Lspace/iseki/goplugin/BuildMode;
+	public final field arg Ljava/lang/String;
+	public static fun valueOf (Ljava/lang/String;)Lspace/iseki/goplugin/BuildMode;
+	public static fun values ()[Lspace/iseki/goplugin/BuildMode;
+}
+
+public class space/iseki/goplugin/GoCompilationTask : org/gradle/api/DefaultTask {
+	public fun <init> ()V
+	public fun getBuildModeProperty ()Lorg/gradle/api/provider/Property;
+	public fun getBuildTagsProperty ()Lorg/gradle/api/provider/ListProperty;
+	public fun getEnvironmentProperty ()Lorg/gradle/api/provider/MapProperty;
+	public fun getFreeArgumentsProperty ()Lorg/gradle/api/provider/ListProperty;
+	public fun getGoCmd ()Lorg/gradle/api/provider/Property;
+	public fun getGoTargetProperty ()Lorg/gradle/api/provider/Property;
+	public fun getInputSourceProperty ()Lorg/gradle/api/file/DirectoryProperty;
+	public fun getLdflagsProperty ()Lorg/gradle/api/provider/Property;
+	public fun getOutputFileProperty ()Lorg/gradle/api/file/RegularFileProperty;
+	public fun getPackageProperty ()Lorg/gradle/api/provider/Property;
+	public fun getTrimPathProperty ()Lorg/gradle/api/provider/Property;
+}
+
+public final class space/iseki/goplugin/GoCompileExtension {
+	public fun <init> (Lorg/gradle/api/Project;)V
+	public final fun dll (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+	public final fun exec (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)V
+}
+
+public final class space/iseki/goplugin/GoCompileExtension$CompilationConfiguration {
+	public fun <init> (Lspace/iseki/goplugin/GoCompileExtension;Lspace/iseki/goplugin/BuildMode;)V
+	public final fun getInputSource ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun goTargets ([Lspace/iseki/goplugin/GoTarget;Lkotlin/jvm/functions/Function1;)V
+	public static synthetic fun goTargets$default (Lspace/iseki/goplugin/GoCompileExtension$CompilationConfiguration;[Lspace/iseki/goplugin/GoTarget;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)V
+}
+
+public final class space/iseki/goplugin/GoCompileExtension$CompilationPerTargetConfig {
+	public fun <init> (Lspace/iseki/goplugin/GoCompileExtension;Lspace/iseki/goplugin/BuildMode;Ljava/lang/String;Lorg/gradle/api/file/DirectoryProperty;Lspace/iseki/goplugin/GoTarget;)V
+	public final fun getBuildMode ()Lspace/iseki/goplugin/BuildMode;
+	public final fun getBuildTagsProperty ()Lorg/gradle/api/provider/ListProperty;
+	public final fun getEnvironmentProperty ()Lorg/gradle/api/provider/MapProperty;
+	public final fun getFreeArgumentsProperty ()Lorg/gradle/api/provider/ListProperty;
+	public final fun getGoTarget ()Lspace/iseki/goplugin/GoTarget;
+	public final fun getInputSource ()Lorg/gradle/api/file/DirectoryProperty;
+	public final fun getLdflagsProperty ()Lorg/gradle/api/provider/Property;
+	public final fun getPackageProperty ()Lorg/gradle/api/provider/Property;
+	public final fun getTaskName ()Ljava/lang/String;
+	public final fun getTrimPathProperty ()Lorg/gradle/api/provider/Property;
+}
+
+public class space/iseki/goplugin/GoCompilePlugin : org/gradle/api/Plugin {
+	public fun <init> ()V
+	public synthetic fun apply (Ljava/lang/Object;)V
+	public fun apply (Lorg/gradle/api/Project;)V
+}
+
+public final class space/iseki/goplugin/GoTarget : java/lang/Record, java/io/Serializable {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun equals (Ljava/lang/Object;)Z
+	public fun goarch ()Ljava/lang/String;
+	public fun goos ()Ljava/lang/String;
+	public final fun hashCode ()I
+	public fun putIntoEnv (Ljava/util/Map;)V
+	public final fun toString ()Ljava/lang/String;
+}
+
+public class space/iseki/goplugin/GoTargets {
+	public static final field AIX_PPC64 Lspace/iseki/goplugin/GoTarget;
+	public static final field ANDROID_386 Lspace/iseki/goplugin/GoTarget;
+	public static final field ANDROID_AMD64 Lspace/iseki/goplugin/GoTarget;
+	public static final field ANDROID_ARM Lspace/iseki/goplugin/GoTarget;
+	public static final field ANDROID_ARM64 Lspace/iseki/goplugin/GoTarget;
+	public static final field DARWIN_AMD64 Lspace/iseki/goplugin/GoTarget;
+	public static final field DARWIN_ARM64 Lspace/iseki/goplugin/GoTarget;
+	public static final field DRAGONFLY_AMD64 Lspace/iseki/goplugin/GoTarget;
+	public static final field FREEBSD_386 Lspace/iseki/goplugin/GoTarget;
+	public static final field FREEBSD_AMD64 Lspace/iseki/goplugin/GoTarget;
+	public static final field FREEBSD_ARM Lspace/iseki/goplugin/GoTarget;
+	public static final field FREEBSD_ARM64 Lspace/iseki/goplugin/GoTarget;
+	public static final field FREEBSD_RISCV64 Lspace/iseki/goplugin/GoTarget;
+	public static final field ILLUMOS_AMD64 Lspace/iseki/goplugin/GoTarget;
+	public static final field IOS_AMD64 Lspace/iseki/goplugin/GoTarget;
+	public static final field IOS_ARM64 Lspace/iseki/goplugin/GoTarget;
+	public static final field JS_WASM Lspace/iseki/goplugin/GoTarget;
+	public static final field LINUX_386 Lspace/iseki/goplugin/GoTarget;
+	public static final field LINUX_AMD64 Lspace/iseki/goplugin/GoTarget;
+	public static final field LINUX_ARM Lspace/iseki/goplugin/GoTarget;
+	public static final field LINUX_ARM64 Lspace/iseki/goplugin/GoTarget;
+	public static final field LINUX_LOONG64 Lspace/iseki/goplugin/GoTarget;
+	public static final field LINUX_MIPS Lspace/iseki/goplugin/GoTarget;
+	public static final field LINUX_MIPS64 Lspace/iseki/goplugin/GoTarget;
+	public static final field LINUX_MIPS64LE Lspace/iseki/goplugin/GoTarget;
+	public static final field LINUX_MIPSLE Lspace/iseki/goplugin/GoTarget;
+	public static final field LINUX_PPC64 Lspace/iseki/goplugin/GoTarget;
+	public static final field LINUX_PPC64LE Lspace/iseki/goplugin/GoTarget;
+	public static final field LINUX_RISCV64 Lspace/iseki/goplugin/GoTarget;
+	public static final field LINUX_S390X Lspace/iseki/goplugin/GoTarget;
+	public static final field LINUX_SPARC64 Lspace/iseki/goplugin/GoTarget;
+	public static final field NETBSD_386 Lspace/iseki/goplugin/GoTarget;
+	public static final field NETBSD_AMD64 Lspace/iseki/goplugin/GoTarget;
+	public static final field NETBSD_ARM Lspace/iseki/goplugin/GoTarget;
+	public static final field NETBSD_ARM64 Lspace/iseki/goplugin/GoTarget;
+	public static final field OPENBSD_386 Lspace/iseki/goplugin/GoTarget;
+	public static final field OPENBSD_AMD64 Lspace/iseki/goplugin/GoTarget;
+	public static final field OPENBSD_ARM Lspace/iseki/goplugin/GoTarget;
+	public static final field OPENBSD_ARM64 Lspace/iseki/goplugin/GoTarget;
+	public static final field OPENBSD_MIPS64 Lspace/iseki/goplugin/GoTarget;
+	public static final field OPENBSD_PPC64 Lspace/iseki/goplugin/GoTarget;
+	public static final field OPENBSD_RISCV64 Lspace/iseki/goplugin/GoTarget;
+	public static final field PLAN9_386 Lspace/iseki/goplugin/GoTarget;
+	public static final field PLAN9_AMD64 Lspace/iseki/goplugin/GoTarget;
+	public static final field PLAN9_ARM Lspace/iseki/goplugin/GoTarget;
+	public static final field SOLARIS_AMD64 Lspace/iseki/goplugin/GoTarget;
+	public static final field WASIP1_WASM Lspace/iseki/goplugin/GoTarget;
+	public static final field WINDOWS_386 Lspace/iseki/goplugin/GoTarget;
+	public static final field WINDOWS_AMD64 Lspace/iseki/goplugin/GoTarget;
+	public static final field WINDOWS_ARM Lspace/iseki/goplugin/GoTarget;
+	public static final field WINDOWS_ARM64 Lspace/iseki/goplugin/GoTarget;
+	public fun <init> ()V
+}
+
