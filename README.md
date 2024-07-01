@@ -13,11 +13,29 @@ plugins {
 }
 
 go {
+    // For executable
     exec("bin-exec") {
         inputSource = project.layout.projectDirectory.dir("gosrc")
         goTargets(GoTargets.LINUX_AMD64)
         goTargets(GoTargets.LINUX_ARM64)
     }
+
+    // For dynamic library
+    dll("bin-dll") {
+        inputSource = project.layout.projectDirectory.dir("gosrc")
+        // Cross-platform building use Zig toolchain
+        goTargets(GoTargets.LINUX_AMD64) {
+            environmentProperty.put("CGO_ENABLED", "1")
+            environmentProperty.put("CC", "zig cc -target x86_64-linux-gnu")
+            environmentProperty.put("CXX", "zig cxx -target x86_64-linux-gnu")
+        }
+        goTargets(GoTargets.LINUX_ARM64) {
+            environmentProperty.put("CGO_ENABLED", "1")
+            environmentProperty.put("CC", "zig cc -target aarch64-linux")
+            environmentProperty.put("CXX", "zig cxx -target aarch64-linux")
+        }
+    }
+
 }
 ```
 In `settings.gradle.kts`:
